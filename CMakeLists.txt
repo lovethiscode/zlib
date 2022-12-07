@@ -82,7 +82,21 @@ configure_file(	${CMAKE_CURRENT_SOURCE_DIR}/zconf.h.cmakein
 		${CMAKE_CURRENT_SOURCE_DIR}/zconf.h @ONLY)
 include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR})
 
-
+#minizip
+configure_file(	${CMAKE_CURRENT_SOURCE_DIR}/contrib/minizip/unzip.h
+		${CMAKE_CURRENT_SOURCE_DIR}/unzip.h @ONLY)
+configure_file(	${CMAKE_CURRENT_SOURCE_DIR}/contrib/minizip/unzip.c
+		${CMAKE_CURRENT_SOURCE_DIR}/unzip.c @ONLY)
+configure_file(	${CMAKE_CURRENT_SOURCE_DIR}/contrib/minizip/zip.h
+		${CMAKE_CURRENT_SOURCE_DIR}/zip.h @ONLY)
+configure_file(	${CMAKE_CURRENT_SOURCE_DIR}/contrib/minizip/zip.c
+		${CMAKE_CURRENT_SOURCE_DIR}/zip.c @ONLY)
+configure_file(	${CMAKE_CURRENT_SOURCE_DIR}/contrib/minizip/ioapi.h
+		${CMAKE_CURRENT_SOURCE_DIR}/ioapi.h @ONLY)
+configure_file(	${CMAKE_CURRENT_SOURCE_DIR}/contrib/minizip/ioapi.c
+		${CMAKE_CURRENT_SOURCE_DIR}/ioapi.c @ONLY)
+configure_file(	${CMAKE_CURRENT_SOURCE_DIR}/contrib/minizip/crypt.h
+		${CMAKE_CURRENT_SOURCE_DIR}/crypt.h @ONLY)
 #============================================================================
 # zlib
 #============================================================================
@@ -101,6 +115,9 @@ set(ZLIB_PRIVATE_HDRS
     inftrees.h
     trees.h
     zutil.h
+    unzip.h
+    zip.h
+    ioapi.h
 )
 set(ZLIB_SRCS
     adler32.c
@@ -118,6 +135,9 @@ set(ZLIB_SRCS
     trees.c
     uncompr.c
     zutil.c
+    unzip.c
+    zip.c
+    ioapi.c
 )
 
 if(NOT MINGW)

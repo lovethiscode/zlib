@@ -26,3 +26,9 @@
 .DS_Store
 zconf.h
 zconf.h.included
+ioapi.c
+ioapi.h
+unzip.c
+unzip.h
+zip.c
+zip.h
