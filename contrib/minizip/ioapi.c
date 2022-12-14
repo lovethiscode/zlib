@@ -20,7 +20,31 @@
 #define FTELLO_FUNC(stream) ftello(stream)
 #define FSEEKO_FUNC(stream, offset, origin) fseeko(stream, offset, origin)
 #else
+#ifdef _WIN32
+#include <windows.h>
+#include <stdio.h>
+wchar_t* Utf8ToUnicode(const char* utf8) {
+  int nLength = MultiByteToWideChar(CP_UTF8, 0, utf8, strlen(utf8), 0, 0);
+  wchar_t* result = malloc((nLength + 1) * sizeof(wchar_t));
+  result[nLength] = 0;
+  MultiByteToWideChar(CP_UTF8, 0, utf8, strlen(utf8), result, nLength);
+  return result;
+}
+
+FILE* OpenUseUtf16(const char* filename, const char* mode) {
+  wchar_t* utf16_filename = Utf8ToUnicode(filename);
+  wchar_t* utf16_mode = Utf8ToUnicode(mode);
+  FILE* f = _wfopen(utf16_filename, utf16_mode);
+  free(utf16_filename);
+  free(utf16_mode);
+  return f;
+}
+
+
+#define FOPEN_FUNC(filename, mode)  OpenUseUtf16(filename, mode)
+#else
 #define FOPEN_FUNC(filename, mode) fopen64(filename, mode)
+#endif // _WIN32
 #define FTELLO_FUNC(stream) ftello64(stream)
 #define FSEEKO_FUNC(stream, offset, origin) fseeko64(stream, offset, origin)
 #endif
@@ -231,7 +255,7 @@ static int ZCALLBACK ferror_file_func (voidpf opaque, voidpf stream)
     return ret;
 }
 
-void fill_fopen_filefunc (pzlib_filefunc_def)
+/*void fill_fopen_filefunc(pzlib_filefunc_def)
   zlib_filefunc_def* pzlib_filefunc_def;
 {
     pzlib_filefunc_def->zopen_file = fopen_file_func;
@@ -242,7 +266,7 @@ void fill_fopen_filefunc (pzlib_filefunc_def)
     pzlib_filefunc_def->zclose_file = fclose_file_func;
     pzlib_filefunc_def->zerror_file = ferror_file_func;
     pzlib_filefunc_def->opaque = NULL;
-}
+}*/
 
 void fill_fopen64_filefunc (zlib_filefunc64_def*  pzlib_filefunc_def)
 {

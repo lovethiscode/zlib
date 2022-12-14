@@ -67,6 +67,18 @@
 #endif
 #endif
 
+
+#ifdef __ANDROID__
+#define fopen64 fopen
+#ifdef __USE_FILE_OFFSET64
+#define ftello64 ftello
+#define fseeko64 fseek
+#else
+#define ftello64 ftell
+#define fseeko64 fseek
+#endif
+#endif
+
 /*
 #ifndef ZPOS64_T
   #ifdef _WIN32
@@ -174,7 +186,7 @@ typedef struct zlib_filefunc64_def_s
 } zlib_filefunc64_def;
 
 void fill_fopen64_filefunc OF((zlib_filefunc64_def* pzlib_filefunc_def));
-void fill_fopen_filefunc OF((zlib_filefunc_def* pzlib_filefunc_def));
+//void fill_fopen_filefunc OF((zlib_filefunc_def* pzlib_filefunc_def));
 
 /* now internal definition, only for zip.c and unzip.h */
 typedef struct zlib_filefunc64_32_def_s
